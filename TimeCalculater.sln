@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeCalculater", "TimeCalculater\TimeCalculater.csproj", "{BCE16ACE-F677-46B4-93A2-300772B7EEFC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BCE16ACE-F677-46B4-93A2-300772B7EEFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCE16ACE-F677-46B4-93A2-300772B7EEFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCE16ACE-F677-46B4-93A2-300772B7EEFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCE16ACE-F677-46B4-93A2-300772B7EEFC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {75903CC4-BA44-457E-BC5B-73557E386143}
+	EndGlobalSection
+EndGlobal
