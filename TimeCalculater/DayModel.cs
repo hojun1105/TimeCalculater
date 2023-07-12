@@ -9,7 +9,6 @@ namespace TimeCalculater
 {
     public class DayModel
     {
-        
         public string StartTime {get;set;}
         public string EndTime {get; set;}
         public DateTime RoundedStartTime { get; set;}
