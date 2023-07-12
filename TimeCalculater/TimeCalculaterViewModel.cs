@@ -17,9 +17,6 @@ namespace TimeCalculater
             Wednesday= new DayModel();
             Thursday= new DayModel();
             Friday= new DayModel();
-
-            DayModels = new List<DayModel>();
-          
         }
 
         #region Properties
@@ -49,35 +46,48 @@ namespace TimeCalculater
             }
         }
 
-        public string LeftTime { get; set; }
+        public string _leftTime;
+        public string LeftTime
+        {
+            get { return _leftTime; }
+            set 
+            {
+                if(value != _leftTime)
+                {
+                    _leftTime = value;
+                    OnPropertyChanged(nameof(LeftTime));
+                }
+            }
+        }
 
         #region Method
 
         public void FillDayModels()
         {
-            if (DayModels.Count==0)
-            {
-                DayModels.AddRange(new List<DayModel> { Monday, Tuesday, Wednesday, Thursday, Friday });
-            }
+            DayModels = new List<DayModel>();
+            DayModels.AddRange(new List<DayModel> { Monday, Tuesday, Wednesday, Thursday, Friday });
+            
             foreach (var item in DayModels)
             {
                 if (item.StartTime != null && item.EndTime != null)
                 {
-                    var startTime = DateTime.ParseExact(item.StartTime, "HH:mm",CultureInfo.InvariantCulture);
-                    if(startTime.Minute >=51 && startTime.Minute<= 59)
+                    if(DateTime.TryParseExact(item.StartTime ,"HH:mm" ,CultureInfo.InvariantCulture ,DateTimeStyles.None,out DateTime startTime)
+                        && DateTime.TryParseExact(item.EndTime ,"HH:mm" ,CultureInfo.InvariantCulture ,DateTimeStyles.None ,out DateTime endTime))
                     {
-                        item.RoundedStartTime = new DateTime(1,1,1,startTime.Hour+1, 0,0);
-                    }
-                    else
-                    {
-                        var startTimeMinute = (int)(Math.Ceiling((double)(startTime.Minute) / 10))*10;
-                        item.RoundedStartTime = new DateTime(1,1,1,startTime.Hour,startTimeMinute,0);
-                    }
+                        if (startTime.Minute >= 51 && startTime.Minute <= 59)
+                        {
+                            item.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour + 1, 0, 0);
+                        }
+                        else
+                        {
+                            var startTimeMinute = (int)(Math.Ceiling((double)(startTime.Minute) / 10)) * 10;
+                            item.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour, startTimeMinute, 0);
+                        }
 
-                    var endTime = DateTime.ParseExact(item.EndTime, "HH:mm", CultureInfo.InvariantCulture);
-                    var endTimeMinute = (int)Math.Floor((double)endTime.Minute / 10) * 10;
-                   item.RoundedEndTime = new DateTime(1,1,1,endTime.Hour, endTimeMinute, 0);
-                }
+                        var endTimeMinute = (int)Math.Floor((double)endTime.Minute / 10) * 10;
+                        item.RoundedEndTime = new DateTime(1, 1, 1, endTime.Hour, endTimeMinute, 0);
+                    }
+                }   
             }
         }
 
@@ -86,10 +96,19 @@ namespace TimeCalculater
             TimeSpan StackedTime = TimeSpan.Zero;
             foreach(var item in DayModels)
             {
-                item.WorkDuration = item.RoundedEndTime- item.RoundedStartTime;
-                StackedTime += item.WorkDuration;
+
+                if (item.RoundedStartTime == DateTime.MinValue || item.RoundedEndTime == DateTime.MinValue) break;
+                else
+                {
+                    item.WorkDuration = item.RoundedEndTime - item.RoundedStartTime - TimeSpan.FromHours(1);
+                    StackedTime += item.WorkDuration;
+                }
             }
-            WorkedTime = StackedTime.ToString(); 
+            if(StackedTime == TimeSpan.Zero) { return; }
+            WorkedTime = $"{StackedTime.Days * 24 + StackedTime.Hours}:{StackedTime.Minutes:00}";
+
+            var leftTime = (TimeSpan.FromHours(40) - StackedTime);
+            LeftTime = $"{leftTime.Days * 24 + leftTime.Hours}:{leftTime.Minutes:00}";
         }
 
         #endregion
