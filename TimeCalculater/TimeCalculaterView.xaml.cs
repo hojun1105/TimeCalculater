@@ -32,10 +32,7 @@ namespace TimeCalculater
             {
                 viewModel.FillDayModels();
                 viewModel.TimeCalculate();
-                sdfs
             }
-             
-
         }
     }
 }
