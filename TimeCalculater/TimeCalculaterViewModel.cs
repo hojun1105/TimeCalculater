@@ -53,7 +53,6 @@ namespace TimeCalculater
 
         #region Method
 
-
         public void FillDayModels()
         {
             if (DayModels.Count==0)
@@ -81,7 +80,6 @@ namespace TimeCalculater
                 }
             }
         }
-
 
         public void TimeCalculate()
         {
