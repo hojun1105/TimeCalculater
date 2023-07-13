@@ -46,15 +46,15 @@ namespace TimeCalculater
             }
         }
 
-        public string _leftTime;
+        public string _LeftTime;
         public string LeftTime
         {
-            get => _leftTime; 
+            get => _LeftTime; 
             set 
             {
-                if(value != _leftTime)
+                if(value != _LeftTime)
                 {
-                    _leftTime = value;
+                    _LeftTime = value;
                     OnPropertyChanged(nameof(LeftTime));
                 }
             }
