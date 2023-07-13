@@ -27,15 +27,9 @@ namespace TimeCalculater
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var viewModel = DataContext as TimeCalculaterViewModel;
-            if(viewModel != null )
-            {
-                viewModel.FillDayModels();
-                viewModel.TimeCalculate();
-                sdfs
-            }
-             
-
+            if (!(DataContext is TimeCalculaterViewModel viewModel)) return;
+            viewModel.FillDayModels();
+            viewModel.TimeCalculate();
         }
     }
 }

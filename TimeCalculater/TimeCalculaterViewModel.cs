@@ -38,7 +38,7 @@ namespace TimeCalculater
         public string _WorkedTime;
         public string WorkedTime 
         { 
-            get { return _WorkedTime; }
+            get => _WorkedTime;
             set 
             {
                 if (value != _WorkedTime)
