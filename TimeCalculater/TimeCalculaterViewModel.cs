@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace TimeCalculater
 {
@@ -110,6 +111,7 @@ namespace TimeCalculater
             var leftTime = (TimeSpan.FromHours(40) - StackedTime);
             LeftTime = $"{leftTime.Days * 24 + leftTime.Hours}:{leftTime.Minutes:00}";
         }
+
 
         #endregion
 
