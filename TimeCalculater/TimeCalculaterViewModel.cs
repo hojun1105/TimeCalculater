@@ -5,12 +5,16 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace TimeCalculater
 {
     public class TimeCalculaterViewModel : INotifyPropertyChanged
     {
+
+        public ICommand SplitAndSetCommand { get; private set; }
+
         public TimeCalculaterViewModel()
         {
             Monday = new DayModel();
@@ -18,6 +22,8 @@ namespace TimeCalculater
             Wednesday= new DayModel();
             Thursday= new DayModel();
             Friday= new DayModel();
+
+            SplitAndSetCommand = new DelegateCommand(SplitAndSetExecute);
         }
 
         #region Properties
@@ -30,6 +36,20 @@ namespace TimeCalculater
         public DayModel Wednesday { get; set; }
         public DayModel Thursday { get; set; }
         public DayModel Friday { get; set; }
+
+        public string _Memo;
+        public string Memo 
+        {
+            get=>_Memo;
+            set
+            {
+                if (value != Memo)
+                {
+                    _Memo = value;
+                    OnPropertyChanged(nameof(Memo));   
+                }
+            }
+        }
 
         #endregion 
 
@@ -112,6 +132,13 @@ namespace TimeCalculater
             LeftTime = $"{leftTime.Days * 24 + leftTime.Hours}:{leftTime.Minutes:00}";
         }
 
+        public void SplitAndSetExecute(object parameter)
+        {
+            if (Clipboard.ContainsText())
+            {
+                Memo = Clipboard.GetText();
+            }
+        }
 
         #endregion
 

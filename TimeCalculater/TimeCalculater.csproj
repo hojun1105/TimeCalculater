@@ -64,6 +64,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DayModel.cs" />
+    <Compile Include="DelegateCommand.cs" />
     <Compile Include="TimeCalculaterView.xaml.cs">
       <DependentUpon>TimeCalculaterView.xaml</DependentUpon>
       <SubType>Code</SubType>
