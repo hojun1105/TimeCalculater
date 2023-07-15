@@ -199,9 +199,9 @@ namespace TimeCalculater
         public void SplitAndSetMemo()
         {
             
-            string[] delimiter= { "\n","출근","퇴근" };
+            string[] delimiter= { "\n","\r\n","출근","퇴근" };
             List<string> splittedStringList = new List<string>();
-            splittedStringList =  Memo.Split(delimiter, StringSplitOptions.RemoveEmptyEntries).ToList();
+            splittedStringList = Memo.Split(delimiter, StringSplitOptions.RemoveEmptyEntries).ToList();
             splittedStringList.RemoveAt(0);
         
             for(int i =0; i<splittedStringList.Count; i++)
