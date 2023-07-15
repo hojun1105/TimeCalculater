@@ -13,7 +13,6 @@ namespace TimeCalculater
     public class TimeCalculaterViewModel : INotifyPropertyChanged
     {
 
-        public ICommand SplitAndSetCommand { get; private set; }
 
         public TimeCalculaterViewModel()
         {
@@ -23,30 +22,95 @@ namespace TimeCalculater
             Thursday= new DayModel();
             Friday= new DayModel();
 
-            SplitAndSetCommand = new DelegateCommand(SplitAndSetExecute);
+            DayModels = new List<DayModel> { Monday, Tuesday, Wednesday, Thursday, Friday };
         }
+
 
         #region Properties
 
         public List<DayModel> DayModels { get; set; }
 
-       
-        public DayModel Monday {get;set;}
-        public DayModel Tuesday { get; set; }
-        public DayModel Wednesday { get; set; }
-        public DayModel Thursday { get; set; }
-        public DayModel Friday { get; set; }
+
+        public DayModel _Monday;
+        public DayModel Monday 
+        {
+            get=>_Monday;
+            set
+            {
+                if (value != _Monday)
+                {
+                    _Monday = value;
+                    OnPropertyChanged(nameof(Monday));
+                }
+            }
+        }
+
+        public DayModel _Tuesday;
+        public DayModel Tuesday
+        {
+            get => _Tuesday;
+            set
+            {
+                if (value != _Tuesday)
+                {
+                    _Tuesday = value;
+                    OnPropertyChanged(nameof(Tuesday));
+                }
+            }
+        }
+
+        public DayModel _Wednesday;
+        public DayModel Wednesday
+        {
+            get => _Wednesday;
+            set
+            {
+                if (value != _Wednesday)
+                {
+                    _Wednesday = value;
+                    OnPropertyChanged(nameof(Wednesday));
+                }
+            }
+        }
+
+        public DayModel _Thursday;
+        public DayModel Thursday
+        {
+            get => _Thursday;
+            set
+            {
+                if (value != _Thursday)
+                {
+                    _Thursday = value;
+                    OnPropertyChanged(nameof(Thursday));
+                }
+            }
+        }
+
+        public DayModel _Friday;
+        public DayModel Friday
+        {
+            get => _Friday;
+            set
+            {
+                if (value != _Friday)
+                {
+                    _Friday = value;
+                    OnPropertyChanged(nameof(Friday));
+                }
+            }
+        }
 
         public string _Memo;
-        public string Memo 
+        public string Memo
         {
-            get=>_Memo;
+            get => _Memo;
             set
             {
                 if (value != Memo)
                 {
                     _Memo = value;
-                    OnPropertyChanged(nameof(Memo));   
+                    OnPropertyChanged(nameof(Memo));
                 }
             }
         }
@@ -85,8 +149,8 @@ namespace TimeCalculater
 
         public void FillDayModels()
         {
-            DayModels = new List<DayModel>();
-            DayModels.AddRange(new List<DayModel> { Monday, Tuesday, Wednesday, Thursday, Friday });
+            
+            DayModels = new List<DayModel>{ Monday, Tuesday, Wednesday, Thursday, Friday };
             
             foreach (var item in DayModels)
             {
@@ -132,13 +196,33 @@ namespace TimeCalculater
             LeftTime = $"{leftTime.Days * 24 + leftTime.Hours}:{leftTime.Minutes:00}";
         }
 
-        public void SplitAndSetExecute(object parameter)
+        public void SplitAndSetMemo()
         {
-            if (Clipboard.ContainsText())
+            
+            string[] delimiter= { "\n","출근","퇴근" };
+            List<string> splittedStringList = new List<string>();
+            splittedStringList =  Memo.Split(delimiter, StringSplitOptions.RemoveEmptyEntries).ToList();
+            splittedStringList.RemoveAt(0);
+        
+            for(int i =0; i<splittedStringList.Count; i++)
             {
-                Memo = Clipboard.GetText();
+                var quotient = i / 3;
+                var remainder = i % 3;
+
+                switch (remainder)
+                {
+                    case 0:
+                        DayModels[quotient].StartTime = splittedStringList[i];
+                        break;
+                    case 1:
+                        DayModels[quotient].EndTime = splittedStringList[i];
+                        break;
+                    default:
+                        break;
+                }
             }
         }
+
 
         #endregion
 
