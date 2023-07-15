@@ -6,10 +6,9 @@
         xmlns:local="clr-namespace:TimeCalculater"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        d:DataContext="{d:DesignInstance local:TimeCalculaterViewModel}">
-    <Window.InputBindings>
-        <KeyBinding Key="V" Modifiers="Control" Command="{Binding SplitAndSetCommand}" />
-    </Window.InputBindings>
+        d:DataContext="{d:DesignInstance local:TimeCalculaterViewModel}"
+        PreviewKeyDown="Window_PreviewKeyDown">
+
     <Window.Resources>
         <local:WorkTimeConverter x:Key="WorkTimeConverter"/>
         <local:LeftTimeConverter x:Key="LeftTimeConverter"/>

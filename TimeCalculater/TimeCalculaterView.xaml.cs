@@ -32,7 +32,21 @@ namespace TimeCalculater
             viewModel.FillDayModels();
             viewModel.TimeCalculate();
         }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
+            {
+                if (!(DataContext is TimeCalculaterViewModel viewModel)) return;
+                viewModel.Memo = Clipboard.GetText();
+                viewModel.SplitAndSetMemo();
+            }
+        }
     }
+
+    
+
+    #region Converter
 
     public class WorkTimeConverter : IValueConverter
     {
@@ -67,4 +81,6 @@ namespace TimeCalculater
             throw new NotImplementedException();
         }
     }
+
+    #endregion
 }
