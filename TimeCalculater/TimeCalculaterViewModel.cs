@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Runtime;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -199,27 +201,26 @@ namespace TimeCalculater
         public void SplitAndSetMemo()
         {
             
-            string[] delimiter= { "\n","\r\n","출근","퇴근" };
-            List<string> splittedStringList = new List<string>();
-            splittedStringList = Memo.Split(delimiter, StringSplitOptions.RemoveEmptyEntries).ToList();
-            splittedStringList.RemoveAt(0);
-        
-            for(int i =0; i<splittedStringList.Count; i++)
+            string[] delimiter= { "\n","\r\n","출근","퇴근" }; 
+            var splitSegments = Memo.Split(delimiter, StringSplitOptions.RemoveEmptyEntries).ToList();
+            splitSegments.RemoveAt(0);
+            splitSegments.RemoveAll(a => !DateTime.TryParse(a, out var d));
+            
+            for(int i =0; i<splitSegments.Count; i++)
             {
-                var quotient = i / 3;
-                var remainder = i % 3;
-
+                var quotient = i / 2;
+                var remainder = i % 2;
                 switch (remainder)
                 {
                     case 0:
-                        DayModels[quotient].StartTime = splittedStringList[i];
+                        DayModels[quotient].StartTime = splitSegments[i];
                         break;
                     case 1:
-                        DayModels[quotient].EndTime = splittedStringList[i];
+                        DayModels[quotient].EndTime = splitSegments[i];
                         break;
-                    default:
-                        break;
+                   
                 }
+                
             }
         }
 
