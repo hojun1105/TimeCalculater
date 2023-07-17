@@ -71,6 +71,11 @@ namespace TimeCalculater
         {
             if(value is string time)
             {
+                if (time.Contains("-"))
+                {
+                    var removedTime = time.Remove(time.IndexOf("-"),1);
+                    return $"초과 시간 : {removedTime}";
+                }
                 return $"남은 시간 : {time}";
             }
             return null;
