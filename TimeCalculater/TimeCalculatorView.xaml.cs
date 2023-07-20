@@ -13,31 +13,34 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TimeCalculator;
 
-namespace TimeCalculater
+namespace TimeCalculator
 {
     /// <summary>
     /// MainWindow.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class TimeCalculaterView : Window
+    public partial class TimeCalculatorView : Window
     {
-        public TimeCalculaterView()
+        public TimeCalculatorView()
         {
             InitializeComponent();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (!(DataContext is TimeCalculaterViewModel viewModel)) return;
+            if (!(DataContext is TimeCalculatorViewModel viewModel)) return;
             viewModel.FillDayModels();
             viewModel.TimeCalculate();
+            viewModel.TimeExpect();
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
             {
-                if (!(DataContext is TimeCalculaterViewModel viewModel)) return;
+                DataContext = new TimeCalculatorViewModel();
+                var viewModel = (TimeCalculatorViewModel)DataContext;
                 viewModel.Memo = Clipboard.GetText();
                 viewModel.SplitAndSetMemo();
             }
