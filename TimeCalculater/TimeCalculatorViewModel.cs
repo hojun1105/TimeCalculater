@@ -22,6 +22,7 @@ namespace TimeCalculator
             Wednesday= new DayModel();
             Thursday= new DayModel();
             Friday= new DayModel();
+            ExpectedFriday = new DayModel();
 
             DayModels = new List<DayModel> { Monday, Tuesday, Wednesday, Thursday, Friday };
         }
@@ -102,6 +103,21 @@ namespace TimeCalculator
             }
         }
 
+        public DayModel _ExpectedFriday;
+
+        public DayModel ExpectedFriday
+        {
+            get => _ExpectedFriday;
+            set
+            {
+                if (value != _ExpectedFriday)
+                {
+                    _ExpectedFriday = value;
+                    OnPropertyChanged(nameof(ExpectedFriday));
+                }
+            }
+        }
+
         public string _Memo;
         public string Memo
         {
@@ -131,6 +147,8 @@ namespace TimeCalculator
                 }
             }
         }
+
+        public TimeSpan LeftTimeSpan { get; set; }
 
         public string _LeftTime;
         public string LeftTime
@@ -199,8 +217,8 @@ namespace TimeCalculator
             if(stackedTime == TimeSpan.Zero) { return; }
             WorkedTime = $"{stackedTime.Days * 24 + stackedTime.Hours}:{stackedTime.Minutes:00}";
 
-            var leftTime = (TimeSpan.FromHours(40) - stackedTime);
-            LeftTime = $"{leftTime.Days * 24 + leftTime.Hours}:{leftTime.Minutes:00}";
+            LeftTimeSpan = (TimeSpan.FromHours(40) - stackedTime);
+            LeftTime = $"{LeftTimeSpan.Days * 24 + LeftTimeSpan.Hours}:{LeftTimeSpan.Minutes:00}";
         }
 
         //연월차 + 공휴일 처리간편하게 할거같아서 만들어놓음
@@ -276,10 +294,26 @@ namespace TimeCalculator
 
         public void TimeExpect()
         {
-            double averageTicks = DayModels.Select(a => a.RoundedStartTime).Select(date => date.TimeOfDay.Ticks).Average();
+            var listTillThursday = DayModels.Where(a => a.EndTime != null).ToList();
+            var averageTicks = listTillThursday.Select(a => a.RoundedStartTime).Select(date => date.TimeOfDay.Ticks).Average();
             TimeSpan averageTime = new TimeSpan((long)averageTicks);
+            ExpectedFriday.StartTime = averageTime.ToString(@"hh\:mm");
+            if (DateTime.TryParseExact(ExpectedFriday.StartTime, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTime))
+            {
+                if (startTime.Minute is >= 51 and <= 59)
+                {
+                    ExpectedFriday.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour + 1, 0, 0);
+                }
+                else
+                {
+                    var startTimeMinute = (int)(Math.Ceiling((double)(startTime.Minute) / 10)) * 10;
+                    ExpectedFriday.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour, startTimeMinute, 0);
+                }
+            }
+            ExpectedFriday.RoundedEndTime = ExpectedFriday.RoundedStartTime + LeftTimeSpan+TimeSpan.FromHours(1);
+            ExpectedFriday.EndTime = ExpectedFriday.RoundedEndTime.ToString(@"hh\:mm");
 
-            
+
         }
 
 

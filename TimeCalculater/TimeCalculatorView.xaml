@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:TimeCalculator"
         xmlns:timeCalculator="clr-namespace:TimeCalculator"
         mc:Ignorable="d"
-        Title="Time Calculator" Height="450" Width="800"
+        Title="Time Calculator" Height="450" Width="820"
         d:DataContext="{d:DesignInstance timeCalculator:TimeCalculatorViewModel}"
         PreviewKeyDown="Window_PreviewKeyDown">
     <Window.Resources>
@@ -32,7 +32,7 @@
             <RowDefinition Height="1.5*"/>
         </Grid.RowDefinitions>
         <Border Grid.Row="0" Background="#57aded">
-            <TextBlock Text="이번 주 .." />
+            <TextBlock Text="이번 주 .." FontSize="20" />
         </Border>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -42,6 +42,7 @@
             <Grid Grid.Column="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="0.5*"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -106,8 +107,18 @@
                 <Border Grid.Column="5" Grid.Row="2">
                     <TextBox Text="{Binding Friday.EndTime}"/>
                 </Border>
+                <Border Grid.Column="6" Grid.Row="0" Background="#57aded">
+                    <TextBlock Text="시간 추천" />
+                </Border>
+                <Border Grid.Column="6" Grid.Row="1"
+                      >
+                    <TextBlock Text="{Binding ExpectedFriday.StartTime}"/>
+                </Border>
+                <Border Grid.Column="6" Grid.Row="2" >
+                    <TextBlock Text="{Binding ExpectedFriday.EndTime}"/>
+                </Border>
             </Grid>
-            <Border Grid.Column="1">
+            <Border Grid.Column="1" >
                 <Button Background="White"  Content="Run" Click="Button_Click"/>
             </Border>
         </Grid>
