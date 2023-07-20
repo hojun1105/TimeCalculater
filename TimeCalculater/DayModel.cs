@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TimeCalculater
+namespace TimeCalculator
 {
     public class DayModel : INotifyPropertyChanged
     {
@@ -38,9 +38,8 @@ namespace TimeCalculater
         }
         public DateTime RoundedStartTime { get; set;}
         public DateTime RoundedEndTime { get; set;}
+        public bool IsHalfDayOff { get; set; }
         public TimeSpan WorkDuration { get; set; }
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 

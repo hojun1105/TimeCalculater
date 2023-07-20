@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using TimeCalculator;
 
 namespace TimeCalculater
 {
@@ -16,7 +17,7 @@ namespace TimeCalculater
         private void Application_Startup(object sender, StartupEventArgs e)
         {
             // Handle the startup event here
-            var window = new TimeCalculaterView { DataContext = new TimeCalculaterViewModel() };
+            var window = new TimeCalculatorView { DataContext = new TimeCalculatorViewModel() };
             window.Show();
         }
     }
