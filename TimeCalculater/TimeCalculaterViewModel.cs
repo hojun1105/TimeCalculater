@@ -204,6 +204,10 @@ namespace TimeCalculater
             string[] delimiter= { "\n","\r\n","출근","퇴근" }; 
             var splitSegments = Memo.Split(delimiter, StringSplitOptions.RemoveEmptyEntries).ToList();
             splitSegments.RemoveAt(0);
+            if (splitSegments.Any(s => s.Equals("연차(종일)") || s.Equals("월차(종일)") || s.Equals("월차 (4시간)")))
+            {
+
+            }
             splitSegments.RemoveAll(a => !DateTime.TryParse(a, out var d));
             
             for(int i =0; i<splitSegments.Count; i++)
@@ -222,6 +226,11 @@ namespace TimeCalculater
                 }
                 
             }
+        }
+
+        private List<string> ManageDayOff()
+        {
+            return null;
         }
 
 
