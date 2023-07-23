@@ -311,7 +311,7 @@ namespace TimeCalculator
                 }
             }
             ExpectedFriday.RoundedEndTime = ExpectedFriday.RoundedStartTime + LeftTimeSpan+TimeSpan.FromHours(1);
-            ExpectedFriday.EndTime = ExpectedFriday.RoundedEndTime.ToString(@"hh\:mm");
+            ExpectedFriday.EndTime = ExpectedFriday.RoundedEndTime.ToString("HH:mm");
 
 
         }
