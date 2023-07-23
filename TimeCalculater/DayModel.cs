@@ -36,8 +36,35 @@ namespace TimeCalculator
                 }
             }
         }
-        public DateTime RoundedStartTime { get; set;}
-        public DateTime RoundedEndTime { get; set;}
+
+        public DateTime _RoundedStartTime;
+        public DateTime RoundedStartTime 
+        {
+            get => _RoundedStartTime;
+            set
+            {
+                if (value != _RoundedStartTime)
+                {
+                    _RoundedStartTime = value;
+                    OnPropertyChanged(nameof(RoundedStartTime));
+                }
+            }
+        }
+
+        public DateTime _RoundedEndTime;
+        public DateTime RoundedEndTime 
+        { 
+            get => _RoundedEndTime;
+            set
+            {
+                if(value != _RoundedEndTime)
+                {
+                    _RoundedEndTime= value;
+                    OnPropertyChanged(nameof(RoundedEndTime));
+                }
+            }
+        }
+
         public bool IsHalfDayOff { get; set; }
         public TimeSpan WorkDuration { get; set; }
 
