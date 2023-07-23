@@ -32,7 +32,10 @@ namespace TimeCalculator
             if (!(DataContext is TimeCalculatorViewModel viewModel)) return;
             viewModel.FillDayModels();
             viewModel.TimeCalculate();
-            viewModel.TimeExpect();
+            if (viewModel.Thursday.StartTime != null)
+            {
+                viewModel.TimeExpect(); 
+            }
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -48,7 +51,6 @@ namespace TimeCalculator
     }
 
     
-
     #region Converter
 
     public class WorkTimeConverter : IValueConverter
@@ -82,6 +84,27 @@ namespace TimeCalculator
                 return $"남은 시간 : {time}";
             }
             return null;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class DefaultTimeToEmptyConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if(value is DateTime date)
+            {
+                if(date == DateTime.MinValue)
+                {
+                    return string.Empty;
+                }
+                return date;
+            }
+            return string.Empty;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
