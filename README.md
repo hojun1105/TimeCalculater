@@ -4,4 +4,5 @@
 
 2. 프로그램의 빈화면을 클릭한 후 ctrl+s
 3. Run!
-![answer](https://github.com/hojun1105/TimeCalculator/assets/75318501/a7038677-5b23-439a-9f49-cb1f4b5e192d)
+![answer](https://github.com/hojun1105/TimeCalculator/assets/75318501/c08af9a0-11b0-4f62-860b-cdb8b47c51d2)
+
