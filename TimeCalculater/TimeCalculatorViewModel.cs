@@ -243,9 +243,7 @@ namespace TimeCalculator
                     case 1:
                         DayModels[quotient].EndTime = splitSegments[i];
                         break;
-
                 }
-
             }
         }
 
@@ -294,26 +292,34 @@ namespace TimeCalculator
 
         public void TimeExpect()
         {
-            var listTillThursday = DayModels.Where(a => a.EndTime != null).ToList();
-            var averageTicks = listTillThursday.Select(a => a.RoundedStartTime).Select(date => date.TimeOfDay.Ticks).Average();
-            TimeSpan averageTime = new TimeSpan((long)averageTicks);
-            ExpectedFriday.StartTime = averageTime.ToString(@"hh\:mm");
-            if (DateTime.TryParseExact(ExpectedFriday.StartTime, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTime))
+            if (Friday.StartTime != null)
             {
-                if (startTime.Minute is >= 51 and <= 59)
-                {
-                    ExpectedFriday.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour + 1, 0, 0);
-                }
-                else
-                {
-                    var startTimeMinute = (int)(Math.Ceiling((double)(startTime.Minute) / 10)) * 10;
-                    ExpectedFriday.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour, startTimeMinute, 0);
-                }
+                ExpectedFriday.RoundedStartTime = Friday.RoundedStartTime;
+                ExpectedFriday.StartTime = Friday.StartTime;
+                ExpectedFriday.RoundedEndTime = Friday.RoundedStartTime + LeftTimeSpan + TimeSpan.FromHours(1);
+                ExpectedFriday.EndTime = ExpectedFriday.RoundedEndTime.ToString("HH:mm");
             }
-            ExpectedFriday.RoundedEndTime = ExpectedFriday.RoundedStartTime + LeftTimeSpan+TimeSpan.FromHours(1);
-            ExpectedFriday.EndTime = ExpectedFriday.RoundedEndTime.ToString("HH:mm");
-
-
+            else
+            {
+                var listTillThursday = DayModels.Where(a => a.EndTime != null).ToList();
+                var averageTicks = listTillThursday.Select(a => a.RoundedStartTime).Select(date => date.TimeOfDay.Ticks).Average();
+                TimeSpan averageTime = new TimeSpan((long)averageTicks);
+                ExpectedFriday.StartTime = averageTime.ToString(@"hh\:mm");
+                if (DateTime.TryParseExact(ExpectedFriday.StartTime, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTime))
+                {
+                    if (startTime.Minute is >= 51 and <= 59)
+                    {
+                        ExpectedFriday.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour + 1, 0, 0);
+                    }
+                    else
+                    {
+                        var startTimeMinute = (int)(Math.Ceiling((double)(startTime.Minute) / 10)) * 10;
+                        ExpectedFriday.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour, startTimeMinute, 0);
+                    }
+                }
+                ExpectedFriday.RoundedEndTime = ExpectedFriday.RoundedStartTime + LeftTimeSpan + TimeSpan.FromHours(1);
+                ExpectedFriday.EndTime = ExpectedFriday.RoundedEndTime.ToString("HH:mm");
+            }
         }
 
 
