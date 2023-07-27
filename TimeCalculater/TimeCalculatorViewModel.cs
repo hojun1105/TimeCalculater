@@ -27,6 +27,20 @@ namespace TimeCalculator
             DayModels = new List<DayModel> { Monday, Tuesday, Wednesday, Thursday, Friday };
         }
 
+        public  TimeCalculatorViewModel(List<string> data)
+        {
+            Monday = new DayModel();
+            Tuesday = new DayModel();
+            Wednesday = new DayModel();
+            Thursday = new DayModel();
+            Friday = new DayModel();
+            ExpectedFriday = new DayModel();
+
+            DayModels = new List<DayModel> { Monday, Tuesday, Wednesday, Thursday, Friday };
+
+            SplitAndSetCrawledData(data);
+        }
+
 
         #region Properties
 
@@ -271,6 +285,26 @@ namespace TimeCalculator
                 
             }
         }
+
+        public void SplitAndSetCrawledData(List<string> data)
+        {
+            for (int i = 0; i < data.Count; i++)
+            {
+                var quotient = i / 2;
+                var remainder = i % 2;
+                switch (remainder)
+                {
+                    case 0:
+                        DayModels[quotient].StartTime = data[i];
+                        break;
+                    case 1:
+                        DayModels[quotient].EndTime = data[i];
+                        break;
+                }
+
+            }
+        }
+
 
         private List<string> ManageDayOff(List<string> splitSegments)
         {
