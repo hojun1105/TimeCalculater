@@ -27,6 +27,17 @@ namespace TimeCalculator
             InitializeComponent();
         }
 
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
+            {
+                DataContext = new TimeCalculatorViewModel();
+                var viewModel = (TimeCalculatorViewModel)DataContext;
+                viewModel.Memo = Clipboard.GetText();
+                viewModel.SplitAndSetMemo();
+            }
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (!(DataContext is TimeCalculatorViewModel viewModel)) return;
@@ -38,16 +49,7 @@ namespace TimeCalculator
             }
         }
 
-        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (Keyboard.Modifiers == ModifierKeys.Control && e.Key == Key.S)
-            {
-                DataContext = new TimeCalculatorViewModel();
-                var viewModel = (TimeCalculatorViewModel)DataContext;
-                viewModel.Memo = Clipboard.GetText();
-                viewModel.SplitAndSetMemo();
-            }
-        }
+        
     }
 
     
