@@ -18,22 +18,27 @@ namespace TimeCalculator
 {
     public class Crawler
     {
-
-        public static void crawll()
+        public Crawler() 
         {
-          
-            var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("https://login.office.hiworks.com/");
-
-
-            string loginId = "hojun1105@smartdoctor.onhiworks.com";
-
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
-            IWebElement inputElement = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id='mantine-p3xfh847f']")));
-            
-            inputElement.SendKeys(loginId); 
+            SetXPath();
         }
 
+        private List<string> xPathList;
+
+        private void SetXPath() 
+        {
+            xPathList = new List<string>();
+            for (int i = 1; i < 6; i++)
+            {
+                for(int j = 2; j < 5; j += 2)
+                {
+                    var xPath = $"//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[{i}]/div/div[2]/div[{j}]/span";
+                    xPathList.Add(xPath);
+                }
+            }
+        }
+
+        #region Method
 
         public List<string> Crawl()
         {
@@ -76,24 +81,13 @@ namespace TimeCalculator
 
         public List<string> CrawlDate(ChromeDriver driver)
         {
+            WebDriverWait waitForTimeData = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
             var timeDataList = new List<string>();
-            var XPathList = new string[] {
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[1]/div/div[2]/div[2]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[1]/div/div[2]/div[4]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[2]/div/div[2]/div[2]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[2]/div/div[2]/div[4]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[3]/div/div[2]/div[2]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[3]/div/div[2]/div[4]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[4]/div/div[2]/div[2]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[4]/div/div[2]/div[4]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[5]/div/div[2]/div[2]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[5]/div/div[2]/div[4]/span",
-            };
-
+            
             driver.Navigate().GoToUrl("https://hr-work.office.hiworks.com/personal/index");       
-            foreach (string path in XPathList)
+            foreach (string path in xPathList)
             {
-                WebDriverWait waitForTimeData = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
+                
                 By aPath = By.XPath(path);
                 try
                 {
@@ -107,5 +101,7 @@ namespace TimeCalculator
             }
             return timeDataList;
         }
+
+        #endregion
     }
 }
