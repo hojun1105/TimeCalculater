@@ -43,10 +43,26 @@ namespace TimeCalculator
 
         public void Login(out ChromeDriver driver)
         {
-            driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("https://login.office.hiworks.com/smartdoctor.onhiworks.com");
+            var driverService = ChromeDriverService.CreateDefaultService();
+            driverService.HideCommandPromptWindow = true;
 
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("headless");
+            options.AddArgument("ignore-certificate-errors");
+            driver = new ChromeDriver(driverService, options);
+            driver.Navigate().GoToUrl("https://login.office.hiworks.com/smartdoctor.onhiworks.com");
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
+
+            var loginInput = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/div[2]/div/input")));
+            loginInput.SendKeys("hojun1105");
+            
+            var button = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/button")));
+            button.Click();
+
+            var passWordInput = wait.Until(ExpectedConditions.ElementExists(By.CssSelector("input[class*='mantine-TextInput-input'][type='password']")));
+            passWordInput.SendKeys("hjjeong9794**");
+            button = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/button")));
+            button.Click();
 
             try
             {
@@ -73,19 +89,20 @@ namespace TimeCalculator
                 "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[5]/div/div[2]/div[2]/span",
                 "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[5]/div/div[2]/div[4]/span",
             };
-            driver.Navigate().GoToUrl("https://hr-work.office.hiworks.com/personal/index");
+
+            driver.Navigate().GoToUrl("https://hr-work.office.hiworks.com/personal/index");       
             foreach (string path in XPathList)
             {
-                WebDriverWait waitForTimeData = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                WebDriverWait waitForTimeData = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
                 By aPath = By.XPath(path);
                 try
                 {
-                    var element = waitForTimeData.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists(aPath));
+                    var element = waitForTimeData.Until(ExpectedConditions.ElementExists(aPath));
                     timeDataList.Add(element.Text);
                 }
                 catch (Exception)
                 {
-                    break;
+                    continue;
                 }
             }
             return timeDataList;
