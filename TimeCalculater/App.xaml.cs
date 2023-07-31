@@ -16,9 +16,9 @@ namespace TimeCalculater
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            var data = new Crawler().Crawl();
-            var window = new TimeCalculatorView { DataContext = new TimeCalculatorViewModel(data) };
-            window.Show();
+            var loginView = new LoginView{DataContext = new LoginViewModel(), Width = 200, Height = 100, WindowStartupLocation = WindowStartupLocation.CenterScreen};
+            loginView.Show();
+
         }
     }
 }

@@ -18,6 +18,14 @@ namespace TimeCalculator
 {
     public class Crawler
     {
+        private string _id;
+        private string _password;
+        public Crawler(string id, string password)
+        {
+            _id = id;
+            _password = password;
+        }
+
         public Crawler() 
         {
             SetXPath();
