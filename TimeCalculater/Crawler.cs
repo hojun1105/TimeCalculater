@@ -24,10 +24,6 @@ namespace TimeCalculator
         {
             _id = id;
             _password = password;
-        }
-
-        public Crawler() 
-        {
             SetXPath();
         }
 
@@ -35,16 +31,20 @@ namespace TimeCalculator
 
         private void SetXPath() 
         {
-            xPathList = new List<string>();
-            for (int i = 1; i < 6; i++)
+            xPathList = new List<string>()
             {
-                for(int j = 2; j < 5; j += 2)
-                {
-                    var xPath = $"//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[{i}]/div/div[2]/div[{j}]/span";
-                    xPathList.Add(xPath);
-                }
-            }
-        }
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[1]/div/div[2]/div[2]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[1]/div/div[2]/div[4]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[2]/div/div[2]/div[2]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[2]/div/div[2]/div[4]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[3]/div/div[2]/div[2]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[3]/div/div[2]/div[4]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[4]/div/div[2]/div[2]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[4]/div/div[2]/div[4]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[5]/div/div[2]/div[2]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[5]/div/div[2]/div[4]/span"
+            };
+    }
 
         #region Method
 
@@ -64,16 +64,16 @@ namespace TimeCalculator
             options.AddArgument("ignore-certificate-errors");
             driver = new ChromeDriver(driverService, options);
             driver.Navigate().GoToUrl("https://login.office.hiworks.com/smartdoctor.onhiworks.com");
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
 
             var loginInput = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/div[2]/div/input")));
-            loginInput.SendKeys("hojun1105");
+            loginInput.SendKeys(_id);
             
             var button = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/button")));
             button.Click();
 
             var passWordInput = wait.Until(ExpectedConditions.ElementExists(By.CssSelector("input[class*='mantine-TextInput-input'][type='password']")));
-            passWordInput.SendKeys("hjjeong9794**");
+            passWordInput.SendKeys(_password);
             button = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/button")));
             button.Click();
 
