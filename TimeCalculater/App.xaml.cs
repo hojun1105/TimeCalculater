@@ -16,10 +16,16 @@ namespace TimeCalculater
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            var data = new Crawler().Crawl();
+            var loginViewModel = new LoginViewModel();
+            var loginView = new LoginView
+            {
+                DataContext = loginViewModel, 
+                Width = 300, 
+                Height = 150, 
+                WindowStartupLocation = WindowStartupLocation.CenterScreen
+            };
+            loginView.Show();
 
-            var window = new TimeCalculatorView { DataContext = new TimeCalculatorViewModel(data) };
-            window.Show();
         }
     }
 }

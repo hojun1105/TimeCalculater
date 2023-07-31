@@ -43,7 +43,7 @@ namespace TimeCalculator
             if (!(DataContext is TimeCalculatorViewModel viewModel)) return;
             viewModel.FillDayModels();
             viewModel.TimeCalculate();
-            if (viewModel.Thursday.StartTime != null)
+            if (viewModel.Thursday.EndTime != null && string.IsNullOrEmpty(viewModel.Friday.EndTime))
             {
                 viewModel.TimeExpect(); 
             }

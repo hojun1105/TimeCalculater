@@ -146,13 +146,11 @@ namespace TimeCalculator
             }
         }
 
-        #endregion 
-
         public string _WorkedTime;
-        public string WorkedTime 
-        { 
-            get => _WorkedTime; 
-            set 
+        public string WorkedTime
+        {
+            get => _WorkedTime;
+            set
             {
                 if (value != _WorkedTime)
                 {
@@ -167,16 +165,19 @@ namespace TimeCalculator
         public string _LeftTime;
         public string LeftTime
         {
-            get => _LeftTime; 
-            set 
+            get => _LeftTime;
+            set
             {
-                if(value != _LeftTime)
+                if (value != _LeftTime)
                 {
                     _LeftTime = value;
                     OnPropertyChanged(nameof(LeftTime));
                 }
             }
         }
+
+        #endregion
+
 
         #region Method
 
@@ -301,10 +302,8 @@ namespace TimeCalculator
                         DayModels[quotient].EndTime = data[i];
                         break;
                 }
-
             }
         }
-
 
         private List<string> ManageDayOff(List<string> splitSegments)
         {
@@ -319,19 +318,15 @@ namespace TimeCalculator
                     splitSegments.InsertRange(index, new[] { "09:00", "18:00" });
                 }
             }
-
             return splitSegments;
         }
-
 
         public void TimeExpect()
         {
             if (Friday.StartTime != null)
-            {
-                ExpectedFriday.RoundedStartTime = Friday.RoundedStartTime;
+            {  
                 ExpectedFriday.StartTime = Friday.StartTime;
-                ExpectedFriday.RoundedEndTime = Friday.RoundedStartTime + LeftTimeSpan + TimeSpan.FromHours(1);
-                ExpectedFriday.EndTime = ExpectedFriday.RoundedEndTime.ToString("HH:mm");
+                SetDayModelData(ExpectedFriday);
             }
             else
             {
@@ -339,23 +334,27 @@ namespace TimeCalculator
                 var averageTicks = listTillThursday.Select(a => a.RoundedStartTime).Select(date => date.TimeOfDay.Ticks).Average();
                 TimeSpan averageTime = new TimeSpan((long)averageTicks);
                 ExpectedFriday.StartTime = averageTime.ToString(@"hh\:mm");
-                if (DateTime.TryParseExact(ExpectedFriday.StartTime, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTime))
-                {
-                    if (startTime.Minute is >= 51 and <= 59)
-                    {
-                        ExpectedFriday.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour + 1, 0, 0);
-                    }
-                    else
-                    {
-                        var startTimeMinute = (int)(Math.Ceiling((double)(startTime.Minute) / 10)) * 10;
-                        ExpectedFriday.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour, startTimeMinute, 0);
-                    }
-                }
-                ExpectedFriday.RoundedEndTime = ExpectedFriday.RoundedStartTime + LeftTimeSpan + TimeSpan.FromHours(1);
-                ExpectedFriday.EndTime = ExpectedFriday.RoundedEndTime.ToString("HH:mm");
+                SetDayModelData(ExpectedFriday);
             }
         }
 
+        private void SetDayModelData(DayModel dayModel)
+        {
+            if (DateTime.TryParseExact(dayModel.StartTime, "HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTime))
+            {
+                if (startTime.Minute is >= 51 and <= 59)
+                {
+                    dayModel.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour + 1, 0, 0);
+                }
+                else
+                {
+                    var startTimeMinute = (int)(Math.Ceiling((double)(startTime.Minute) / 10)) * 10;
+                    dayModel.RoundedStartTime = new DateTime(1, 1, 1, startTime.Hour, startTimeMinute, 0);
+                }
+            }
+            dayModel.RoundedEndTime = dayModel.RoundedStartTime + LeftTimeSpan + TimeSpan.FromHours(1);
+            dayModel.EndTime = dayModel.RoundedEndTime.ToString("HH:mm");
+        }
 
         #endregion
 

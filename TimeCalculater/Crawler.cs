@@ -18,22 +18,35 @@ namespace TimeCalculator
 {
     public class Crawler
     {
-
-        public static void crawll()
+        private string _id;
+        private string _password;
+        public Crawler(string id, string password)
         {
-          
-            var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("https://login.office.hiworks.com/");
-
-
-            string loginId = "hojun1105@smartdoctor.onhiworks.com";
-
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
-            IWebElement inputElement = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id='mantine-p3xfh847f']")));
-            
-            inputElement.SendKeys(loginId); 
+            _id = id;
+            _password = password;
+            SetXPath();
         }
 
+        private List<string> xPathList;
+
+        private void SetXPath() 
+        {
+            xPathList = new List<string>()
+            {
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[1]/div/div[2]/div[2]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[1]/div/div[2]/div[4]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[2]/div/div[2]/div[2]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[2]/div/div[2]/div[4]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[3]/div/div[2]/div[2]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[3]/div/div[2]/div[4]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[4]/div/div[2]/div[2]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[4]/div/div[2]/div[4]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[5]/div/div[2]/div[2]/span",
+                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[5]/div/div[2]/div[4]/span"
+            };
+    }
+
+        #region Method
 
         public List<string> Crawl()
         {
@@ -43,10 +56,26 @@ namespace TimeCalculator
 
         public void Login(out ChromeDriver driver)
         {
-            driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("https://login.office.hiworks.com/smartdoctor.onhiworks.com");
+            var driverService = ChromeDriverService.CreateDefaultService();
+            driverService.HideCommandPromptWindow = true;
 
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(60));
+            ChromeOptions options = new ChromeOptions();
+            options.AddArgument("headless");
+            options.AddArgument("ignore-certificate-errors");
+            driver = new ChromeDriver(driverService, options);
+            driver.Navigate().GoToUrl("https://login.office.hiworks.com/smartdoctor.onhiworks.com");
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
+
+            var loginInput = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/div[2]/div/input")));
+            loginInput.SendKeys(_id);
+            
+            var button = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/button")));
+            button.Click();
+
+            var passWordInput = wait.Until(ExpectedConditions.ElementExists(By.CssSelector("input[class*='mantine-TextInput-input'][type='password']")));
+            passWordInput.SendKeys(_password);
+            button = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/button")));
+            button.Click();
 
             try
             {
@@ -60,35 +89,27 @@ namespace TimeCalculator
 
         public List<string> CrawlDate(ChromeDriver driver)
         {
+            WebDriverWait waitForTimeData = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
             var timeDataList = new List<string>();
-            var XPathList = new string[] {
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[1]/div/div[2]/div[2]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[1]/div/div[2]/div[4]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[2]/div/div[2]/div[2]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[2]/div/div[2]/div[4]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[3]/div/div[2]/div[2]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[3]/div/div[2]/div[4]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[4]/div/div[2]/div[2]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[4]/div/div[2]/div[4]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[5]/div/div[2]/div[2]/span",
-                "//*[@id=\'contents\']/div/section[3]/div/section/div[2]/table/tbody/tr/td[5]/div/div[2]/div[4]/span",
-            };
-            driver.Navigate().GoToUrl("https://hr-work.office.hiworks.com/personal/index");
-            foreach (string path in XPathList)
+            
+            driver.Navigate().GoToUrl("https://hr-work.office.hiworks.com/personal/index");       
+            foreach (string path in xPathList)
             {
-                WebDriverWait waitForTimeData = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                
                 By aPath = By.XPath(path);
                 try
                 {
-                    var element = waitForTimeData.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementExists(aPath));
+                    var element = waitForTimeData.Until(ExpectedConditions.ElementExists(aPath));
                     timeDataList.Add(element.Text);
                 }
                 catch (Exception)
                 {
-                    break;
+                    continue;
                 }
             }
             return timeDataList;
         }
+
+        #endregion
     }
 }
