@@ -18,22 +18,13 @@ namespace TimeCalculator
 {
     public class Crawler
     {
-
-        public static void crawll()
+        private string _id;
+        private string _password;
+        public Crawler(string id, string password)
         {
-          
-            var driver = new ChromeDriver();
-            driver.Navigate().GoToUrl("https://login.office.hiworks.com/");
-
-
-            string loginId = "hojun1105@smartdoctor.onhiworks.com";
-
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
-            IWebElement inputElement = wait.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id='mantine-p3xfh847f']")));
-            
-            inputElement.SendKeys(loginId); 
+            _id = id;
+            _password = password;
         }
-
 
         public List<string> Crawl()
         {
