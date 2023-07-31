@@ -8,10 +8,12 @@ namespace TimeCalculator
 {
     public class LoginViewModel
     {
-        
-
         public string Id { get; set; }
         public string Password { get; set; }
-
+    
+        public List<string> ReturnData()
+        {
+            return new List<string> { Id, Password };
+        }
     }
 }
