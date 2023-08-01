@@ -15,6 +15,11 @@ public partial class LoginView
 
     private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
     {
+        var dataContext = (LoginViewModel)DataContext;
+        if (string.IsNullOrEmpty(dataContext.Id) || string.IsNullOrEmpty(dataContext.Password))
+        {
+            return;
+        }
         if (e.Key == Key.Enter)
         {
             ButtonBase_OnClick(sender, e);
@@ -23,7 +28,12 @@ public partial class LoginView
 
     private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
     {
-        var crawler = new Crawler(((LoginViewModel)DataContext).Id, ((LoginViewModel)DataContext).Password);
+        var dataContext = (LoginViewModel)DataContext;
+        if (string.IsNullOrEmpty(dataContext.Id) || string.IsNullOrEmpty(dataContext.Password))
+        {
+            return;
+        }
+        var crawler = new Crawler(dataContext.Id, ((LoginViewModel)DataContext).Password);
         var data = crawler.Crawl();
         
         var window = new TimeCalculatorView 
