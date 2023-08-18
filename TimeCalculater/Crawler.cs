@@ -57,7 +57,7 @@ public class Crawler
         var options = new ChromeOptions();
         options.AddArgument("headless");
         options.AddArgument("ignore-certificate-errors");
-        driver = new ChromeDriver(driverService);
+        driver = new ChromeDriver(driverService,options);
         driver.Navigate().GoToUrl("https://login.office.hiworks.com/smartdoctor.onhiworks.com");
         var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
