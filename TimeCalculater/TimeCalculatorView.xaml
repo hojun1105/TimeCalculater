@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         Title="Time Calculator" Height="450" Width="820"
         d:DataContext="{d:DesignInstance timeCalculator:TimeCalculatorViewModel}"
-        PreviewKeyDown="Window_PreviewKeyDown">
+        PreviewKeyDown="Window_PreviewKeyDown"
+        Icon="Resource/Icon/clock.png">
     <Window.Resources>
         <local:WorkTimeConverter x:Key="WorkTimeConverter"/>
         <local:LeftTimeConverter x:Key="LeftTimeConverter"/>

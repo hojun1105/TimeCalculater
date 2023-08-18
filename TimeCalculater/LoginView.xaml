@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              PreviewKeyDown="Window_PreviewKeyDown"
-        Title="로그인">
+        Title="로그인" Icon="Resource/Icon/clock.png">
     <Window.Resources>
         <Style TargetType="Border" >
             <Setter Property="BorderBrush" Value="black"/>
