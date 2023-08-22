@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.DevTools.V112.Debugger;
 using OpenQA.Selenium.Support.UI;
 using SeleniumExtras.WaitHelpers;
 using WebDriverManager;
@@ -42,10 +44,11 @@ public class Crawler
 
     #region Method
 
-    public List<string> Crawl()
+    public string Crawl()
     {
         Login(out var driver);
-        return CrawlDate(driver);
+        var res = CrawlDate2(driver);
+        return res;
     }
 
     public void Login(out ChromeDriver driver)
@@ -66,17 +69,21 @@ public class Crawler
                 By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/div[2]/div/input")));
         loginInput.SendKeys(_id);
 
-        var button =
+        var button = 
             wait.Until(ExpectedConditions.ElementExists(
                 By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/button")));
+        
         button.Click();
 
         var passWordInput =
             wait.Until(ExpectedConditions.ElementExists(
                 By.CssSelector("input[class*='mantine-TextInput-input'][type='password']")));
+        
         passWordInput.SendKeys(_password);
+        
         button = wait.Until(
             ExpectedConditions.ElementExists(By.XPath("//*[@id=\'root\']/div/main/div/div[1]/form/fieldset/button")));
+
         button.Click();
 
         try
@@ -110,6 +117,15 @@ public class Crawler
         }
 
         return timeDataList;
+    }
+
+    public string CrawlDate2(ChromeDriver driver)
+    {
+        WebDriverWait waitForTimeData = new WebDriverWait(driver, TimeSpan.FromSeconds(1));
+        driver.Navigate().GoToUrl("https://hr-work.office.hiworks.com/personal/index");
+
+        var timeDataList = waitForTimeData.Until(ExpectedConditions.ElementExists(By.XPath("//*[@id=\"contents\"]/div/section[3]/div/section/div[2]/table/tbody/tr")));
+        return timeDataList.Text;
     }
 
     #endregion
