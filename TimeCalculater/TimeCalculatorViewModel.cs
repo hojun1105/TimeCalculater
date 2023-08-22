@@ -27,7 +27,7 @@ namespace TimeCalculator
             DayModels = new List<DayModel> { Monday, Tuesday, Wednesday, Thursday, Friday };
         }
 
-        public  TimeCalculatorViewModel(List<string> data)
+        public TimeCalculatorViewModel(List<string> data)
         {
             Monday = new DayModel();
             Tuesday = new DayModel();
@@ -39,6 +39,18 @@ namespace TimeCalculator
             DayModels = new List<DayModel> { Monday, Tuesday, Wednesday, Thursday, Friday };
 
             SplitAndSetCrawledData(data);
+        }
+
+        public TimeCalculatorViewModel(string data)
+        {
+            Monday = new DayModel();
+            Tuesday = new DayModel();
+            Wednesday = new DayModel();
+            Thursday = new DayModel();
+            Friday = new DayModel();
+            ExpectedFriday = new DayModel();
+            DayModels = new List<DayModel> { Monday, Tuesday, Wednesday, Thursday, Friday };
+            SplitAndSetMemo(data);
         }
 
 
@@ -236,14 +248,13 @@ namespace TimeCalculator
             LeftTime = $"{LeftTimeSpan.Days * 24 + LeftTimeSpan.Hours}:{LeftTimeSpan.Minutes:00}";
         }
 
-        //연월차 + 공휴일 처리간편하게 할거같아서 만들어놓음
-        public void SplitAndSetMemo2()
+        public void SplitAndSetMemo(string data)
         {
-            string[] delimiter = { "\n", "\r\n", "출근", "퇴근" };
-            var splitSegments = Memo.Split(delimiter, StringSplitOptions.RemoveEmptyEntries).ToList();
-            splitSegments.RemoveAt(0);
-
-            splitSegments.RemoveAll(a => a.StartsWith("총") || a.Equals("휴무일") || a.Equals("휴일"));
+            string[] delimiter = { "\r\n", "출근", "퇴근" };
+            var splitSegments = data.Split(delimiter, StringSplitOptions.RemoveEmptyEntries).ToList();
+            
+            splitSegments.RemoveAll(a => a.StartsWith("총") || a.Equals("휴무일") || a.Equals("휴일") || a.StartsWith("계획") 
+            || a.StartsWith("휴가") || a.Equals("실근무") || a.StartsWith("야간") || a.Equals("근무일"));
             splitSegments = ManageDayOff(splitSegments);
 
             for (int i = 0; i < splitSegments.Count; i++)
@@ -307,7 +318,7 @@ namespace TimeCalculator
 
         private List<string> ManageDayOff(List<string> splitSegments)
         {
-            if (splitSegments.Any(s => s.Equals("연차(종일)") || s.Equals("월차(종일)") || s.Equals("설날") || s.Equals("대체공휴일") || s.Equals("삼일절")))
+            if (splitSegments.Any(s => s.Equals("연차(종일)") || s.Equals("월차(종일)") || s.Equals("설날") || s.Equals("대체공휴일") || s.Equals("삼일절") || s.Equals("광복절")))
             {
                 var indices = splitSegments.Select((value, index) => new { value, index })
                     .Where(pair => pair.value is "연차(종일)" or "월차(종일)" or "설날" or "대체공휴일")
@@ -317,6 +328,7 @@ namespace TimeCalculator
                 {
                     splitSegments.InsertRange(index, new[] { "09:00", "18:00" });
                 }
+                splitSegments.RemoveAll(a => a.Equals("연차(종일)") || a.Equals("월차(종일)") || a.Equals("설날") || a.Equals("대체공휴일") || a.Equals("삼일절") || a.Equals("광복절"));
             }
             return splitSegments;
         }
